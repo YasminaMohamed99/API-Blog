@@ -55,17 +55,21 @@ def get_post(request, post_id):
         return Response("Post Deleted Successfully!")
 
 
+@api_view(['GET'])
 def get_categories(request):
-    return None
+    return Response()
 
 
-def get_tags():
-    return None
+@api_view(['GET'])
+def get_tags(request):
+    return Response()
 
 
-def get_comments():
-    return None
+@api_view(['GET', 'POST'])
+def get_comments(request):
+    return Response()
 
 
-def delete_comment():
-    return None
+@api_view(['DELETE'])
+def delete_comment(request):
+    return Response()

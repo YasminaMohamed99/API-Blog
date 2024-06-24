@@ -53,3 +53,19 @@ def get_post(request, post_id):
     if request.method == 'DELETE':
         post.delete()
         return Response("Post Deleted Successfully!")
+
+
+def get_categories(request):
+    return None
+
+
+def get_tags():
+    return None
+
+
+def get_comments():
+    return None
+
+
+def delete_comment():
+    return None

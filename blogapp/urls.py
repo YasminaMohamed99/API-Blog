@@ -8,6 +8,6 @@ urlpatterns = [
     path('api/logout', views.api_logout, name='logout'),
 
     path('api/posts', views.get_posts, name='get-posts'),
-    path('api/posts/<id>', views.get_post, name='get-post'),
+    path('api/posts/<post_id>', views.get_post, name='get-post'),
 
 ]

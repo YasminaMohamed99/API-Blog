@@ -39,7 +39,17 @@ def get_posts(request):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-def get_post(request, id):
-    post = Post.object.get(id=id)
-    post_serializer = PostSerializer(post, many=False)
-    return Response(post_serializer.data)
+def get_post(request, post_id):
+    post = Post.object.get(id=post_id)
+    if request.method == 'GET':
+        post_serializer = PostSerializer(post, many=False)
+        return Response(post_serializer.data)
+    if request.method == 'POST':
+        post_serializer = PostSerializer(data=request.data, instance=post)
+        if post_serializer.is_valid():
+            post_serializer.save()
+            return redirect('get-posts')
+
+    if request.method == 'DELETE':
+        post.delete()
+        return Response("Post Deleted Successfully!")

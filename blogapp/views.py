@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from blogapp.models import Post
-from blogapp.serializers import PostSerializer
+from blogapp.models import Post, Category, Tag, Comment
+from blogapp.serializers import PostSerializer, CategorySerializer, TagSerializer, CommentSerializer
 
 
 # Create your views here.
@@ -26,21 +26,24 @@ def api_logout(request):
 
 
 @api_view(['GET', 'POST'])
-def get_posts(request):
+def posts(request):
     if request.method == 'GET':
-        posts = Post.object.all()
+        posts = Post.objects.all()
         post_serializer = PostSerializer(posts, many=True)
         return Response(post_serializer.data)
     if request.method == 'POST':
         post_serializer = PostSerializer(data=request.data)
         if post_serializer.is_valid():
             post_serializer.save()
-            return redirect('get-posts')
+            return redirect('posts')
+        else:
+            return Response(post_serializer.errors)
 
 
 @api_view(['GET', 'POST', 'DELETE'])
 def get_post(request, post_id):
-    post = Post.object.get(id=post_id)
+    post = Post.objects.get(id=post_id)
+    print(post)
     if request.method == 'GET':
         post_serializer = PostSerializer(post, many=False)
         return Response(post_serializer.data)
@@ -48,7 +51,9 @@ def get_post(request, post_id):
         post_serializer = PostSerializer(data=request.data, instance=post)
         if post_serializer.is_valid():
             post_serializer.save()
-            return redirect('get-posts')
+            return redirect('posts')
+        else:
+            return Response(post_serializer.errors)
 
     if request.method == 'DELETE':
         post.delete()
@@ -56,20 +61,38 @@ def get_post(request, post_id):
 
 
 @api_view(['GET'])
-def get_categories(request):
-    return Response()
+def categories(request):
+    categories = Category.objects.all()
+    category_serializer = CategorySerializer(categories, many=True)
+    return Response(category_serializer.data)
 
 
 @api_view(['GET'])
-def get_tags(request):
-    return Response()
+def tags(request):
+    tags = Tag.objects.all()
+    tag_serializer = TagSerializer(tags, many=True)
+    return Response(tag_serializer.data)
 
 
 @api_view(['GET', 'POST'])
-def get_comments(request):
-    return Response()
+def comments(request):
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        comment_serializer = CommentSerializer(comments, many=True)
+        return Response(comment_serializer.data)
+    if request.method == 'Post':
+        comment_serializer = CommentSerializer(data=request.data)
+        if comment_serializer.is_valid():
+            comment_serializer.save()
+            return redirect('comments')
 
 
-@api_view(['DELETE'])
-def delete_comment(request):
-    return Response()
+@api_view(['GET', 'DELETE'])
+def delete_comment(request, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if request.method == 'GET':
+        comment_serializer = CommentSerializer(comment, many=False)
+        return Response(comment_serializer.data)
+    if request.method == 'DELETE':
+        comment.delete()
+        return Response("Comment Deleted Successfully!")

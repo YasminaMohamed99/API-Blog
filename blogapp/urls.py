@@ -3,9 +3,9 @@ from django.urls import path
 from blogapp import views
 
 urlpatterns = [
-    path('api/register', views.register, name='register'),
-    path('api/login', views.api_login, name='login'),
-    path('api/logout', views.api_logout, name='logout'),
+    path('sign-up', views.sign_up, name='register'),
+    path('sign-in', views.sign_in, name='login'),
+    path('logout', views.sign_out, name='logout'),
 
     path('api/post/', views.posts, name='posts'),
     path('api/posts/<post_id>/', views.get_post, name='get-post'),

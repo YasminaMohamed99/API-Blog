@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .signup-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .signup-form h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .signup-form .form-group {
+            margin-bottom: 15px;
+        }
+        .signup-form .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .signup-form .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .signup-form .form-group input:focus {
+            border-color: #007bff;
+        }
+        .signup-form button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .signup-form button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form class="signup-form">
+        <h2>Signup</h2>
+        <div class="form-group">
+            <label for="username">Username</label>
+            {{ signup_form.username }}
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            {{ signup_form.email }}
+        </div>
+        <div class="form-group">
+            <label for="firstname">First Name</label>
+            {{ signup_form.firstname }}
+        </div>
+        <div class="form-group">
+            <label for="lastname">Last Name</label>
+            {{ signup_form.lastname }}
+        </div>
+        <div class="form-group">
+            <label for="password1">Password</label>
+            {{ signup_form.password1 }}
+        </div>
+        <div class="form-group">
+            <label for="password2">Confirm Password</label>
+            {{ signup_form.password2 }}
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+</body>
+</html>

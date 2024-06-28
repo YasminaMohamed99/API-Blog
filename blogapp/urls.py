@@ -19,6 +19,7 @@ urlpatterns = [
     path('delete_post/<int:post_id>', views.del_post, name='delete_post'),
     path('search/', views.search, name='search_posts'),
     path('apply_filter', views.apply_filter, name='apply_filter'),
+    path('clear_filter', views.clear_filter, name='clear_filter'),
 
     path('api/post/', views.posts, name='posts'),
     path('api/posts/<post_id>/', views.get_post, name='get-post'),

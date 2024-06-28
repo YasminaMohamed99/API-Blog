@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -65,10 +66,18 @@ def list_posts(request):
 
 
 def apply_filter(request):
-    print(request.GET.get(''))
-    all_posts = Post.objects.all()
+    category = request.GET.get('category') or ''
+    tag = request.GET.get('tag') or ''
+    if category:
+        all_posts = Post.objects.filter(categories=category)
+    if tag:
+        all_posts = Post.objects.filter(tags=tag)
     return render(request, "all_posts.html",
                   {"posts": all_posts, "categories": Category.objects.all(), "tags": Tag.objects.all()})
+
+
+def clear_filter(request):
+    return redirect('all_posts')
 
 
 @login_required
@@ -152,8 +161,12 @@ def del_comment(request, comment_id):
 def posts(request):
     if request.method == 'GET':
         posts = Post.objects.all()
-        post_serializer = PostSerializer(posts, many=True)
-        return Response(post_serializer.data)
+        paginator = PageNumberPagination()
+        paginator.page_size = 4
+        result_page = paginator.paginate_queryset(posts, request)
+        post_serializer = PostSerializer(result_page, many=True)
+        return paginator.get_paginated_response(post_serializer.data)
+
     if request.method == 'POST':
         post_serializer = PostSerializer(data=request.data)
         if post_serializer.is_valid():

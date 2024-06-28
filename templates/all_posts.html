@@ -18,34 +18,33 @@
                 <td><a type="button" class="btn btn-primary" href="{% url 'create_post' %}">Create Post</a></td>
             {%endif%}
         </div>
-        <div class="row">
-            <div class="column" style="margin-left:1.5%">
-                <label>Categories</label>
-               <div class="input-group mb-3">
-                  <select class="form-select" id="inputGroupSelect01">
-                    <option selected>Choose Category</option>
-                      {% for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
-                      {%endfor%}
-                  </select>
-               </div>
+        <form method="GET" action="{% url 'apply_filter' %}">
+            <div class="d-flex flex-row">
+                <div class="p-2">
+                    <select name="category">
+                        <option value="">All Categories</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="p-2">
+                    <select name="tag">
+                        <option value="">All Tags</option>
+                        {% for tag in tags %}
+                            <option value="{{ tag.id }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="p-2">
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                </div>
+                <div class="p-2">
+                    <a type="button" class="btn btn-danger" href="{% url 'clear_filter' %}">Clear Filter</a>
+                </div>
             </div>
-            <div class="column" style="margin-left:5%">
-                <label>Tags</label>
-               <div class="input-group mb-3">
-                  <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Choose Tag</option>
-                      {% for tag in tags %}
-                        <option value="{{ category }}">{{ tag }}</option>
-                      {%endfor%}
-                  </select>
-               </div>
-            </div>
-        </div>
-        <div class="d-flex flex-row-revers">
-            <div class="p-2"> <a type="button" class="btn btn-primary" href="{% url 'apply_filter' %}">Apply Filter</a></div>
-            <div class="p-2"><a type="button" class="btn btn-danger" href="">Clear Filter</a></div>
-        </div>
+        </form>
+
         <table class="table">
           <thead>
             <tr>
@@ -91,6 +90,7 @@
     </div>
 
     {% endblock %}
+
 
 </body>
 </html>

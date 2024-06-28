@@ -16,7 +16,6 @@ class Profile(models.Model):
 
 
 class Category(models.Model):
-    # id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -32,7 +31,6 @@ class Category(models.Model):
 
 
 class Tag(models.Model):
-    # id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -48,7 +46,7 @@ class Tag(models.Model):
 
 
 class Post(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True,  auto_created=True)
     title = models.CharField(max_length=50)
     content = models.CharField()
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -62,7 +60,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    id = models.BigIntegerField(primary_key=True)
+    id = models.BigAutoField(primary_key=True, auto_created=True)
     content = models.CharField()
     author = models.ForeignKey(Profile, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -70,5 +68,5 @@ class Comment(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.content
+        return f'Comment by {self.author.user.username} on {self.post.title}'
 

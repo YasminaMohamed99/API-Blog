@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Posts</title>
+</head>
+<body>
+    {% block title_block %}
+    {% endblock %}
+
+    {% block main_block %}
+    <div class="container">
+        <h2 class="mt-5">Posts</h2>
+        <div style="margin-bottom:2%">
+            {% if request.user.is_authenticated %}
+                <td><a type="button" class="btn btn-primary" href="{% url 'create_post' %}">Create Post</a></td>
+            {%endif%}
+        </div>
+        <div class="row">
+            <div class="column" style="margin-left:1.5%">
+                <label>Categories</label>
+               <div class="input-group mb-3">
+                  <select class="form-select" id="inputGroupSelect01">
+                    <option selected>Choose Category</option>
+                      {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                      {%endfor%}
+                  </select>
+               </div>
+            </div>
+            <div class="column" style="margin-left:5%">
+                <label>Tags</label>
+               <div class="input-group mb-3">
+                  <select class="form-select" id="inputGroupSelect02">
+                    <option selected>Choose Tag</option>
+                      {% for tag in tags %}
+                        <option value="{{ category }}">{{ tag }}</option>
+                      {%endfor%}
+                  </select>
+               </div>
+            </div>
+        </div>
+        <div class="d-flex flex-row-revers">
+            <div class="p-2"> <a type="button" class="btn btn-primary" href="{% url 'apply_filter' %}">Apply Filter</a></div>
+            <div class="p-2"><a type="button" class="btn btn-danger" href="">Clear Filter</a></div>
+        </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Title</th>
+              <th scope="col">Content</th>
+              <th scope="col">Author</th>
+              <th scope="col">Category</th>
+              <th scope="col">Tag</th>
+              <th scope="col">Created at</th>
+               <th scope="col">Comments</th>
+              {% if request.user.is_authenticated %}
+                  <th scope="col"></th>
+                  <th scope="col"></th>
+               {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+          {% for post in posts %}
+            <tr>
+              <th scope="row">{{ post.id }}</th>
+              <td>{{ post.title }}</td>
+              <td>{{ post.content }}</td>
+              <td>{{ post.author }}</td>
+              <td> {% for category in post.categories.all %}
+                        {{ category.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+              </td>
+              <td> {% for tag in post.tags.all %}
+                        {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+              </td>
+              <td>{{ post.created_at }}</td>
+               <td><a type="button" class="btn btn-primary" href="{% url 'show_comments' post.id %}">Show</a></td>
+                {% if request.user.is_authenticated %}
+                    <td><a type="button" class="btn btn-primary" href="{% url 'update_post' post.id %}">Update</a></td>
+                    <td><a type="button" class="btn btn-danger" href="{% url 'delete_post' post.id %}">Delete</a></td>
+                {% endif %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    </div>
+
+    {% endblock %}
+
+</body>
+</html>

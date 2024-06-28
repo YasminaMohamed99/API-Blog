@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+    {% block title_block %}
+    {% endblock %}
+
+    {% block main_block %}
+    <div class="container">
+        <h2 class="mt-5">Comments</h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Content</th>
+              <th scope="col">Author</th>
+              <th scope="col">Created at</th>
+                {% if request.user.is_authenticated %}
+                    <th scope="col"></th>
+                {%endif%}
+            </tr>
+          </thead>
+          <tbody>
+          {% for comment in comments %}
+            <tr>
+              <th scope="row">{{ comment.id }}</th>
+              <td>{{ comment.content }}</td>
+              <td>{{ comment.author }}</td>
+              <td>{{ comment.created_at }}</td>
+              {% if request.user.is_authenticated %}
+                <td><a type="button" class="btn btn-danger" href="{% url 'delete_comment' comment.id %}">Delete</a></td>
+              {%endif%}
+            </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+        {% if request.user.is_authenticated %}
+            <form method="POST" action="{% url 'add_comments' post_id %}"> {% csrf_token %}
+                <div class="form-group">
+                    <div class="d-flex">
+                        <input type="text" class="form-control me-2 p-2 " placeholder="Comment" id="id_content" name="content"/>
+                        <button type="submit" class="btn btn-primary">Add Comment</button>
+                    </div>
+                </div>
+            </form>
+        {%endif%}
+    </div>
+
+    {% endblock %}
+
+</body>
+</html>

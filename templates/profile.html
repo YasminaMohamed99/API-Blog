@@ -10,12 +10,24 @@
     {% block title_block %}
     {% endblock %}
     {% block main_block %}
-        <h2>{{ profile.user.username }}'s Profile</h2>
-        <p>Bio: {{ profile.bio }}</p>
-        {% if profile.profile_picture %}
-            <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
-        {% endif %}
-        <a href="{% url 'edit_profile' %}">Edit Profile</a>
+        <div class="m-5">
+            <h1 class="text-danger">{{ profile.user.username }}'s Profile</h1>
+            <p class="mb-3" style="font-size: 1.750rem"><strong style="font-size: 1.75rem">User Name:</strong>{%if user.username %} {{ user.username }} {%else%} {%endif%}</p>
+            <p class="mb-3" style="font-size: 1.750rem"><strong style="font-size: 1.75rem">First Name:</strong> {%if user.first_name %} {{ user.first_name }} {%else%} {%endif%}</p>
+            <p class="mb-3" style="font-size: 1.75rem"><strong style="font-size: 1.75rem">Last Name:</strong>{%if user.last_name %} {{ user.last_name }} {%else%} {%endif%}</p>
+            <p class="mb-3" style="font-size: 1.75rem"><strong style="font-size: 1.75rem">Email:</strong>{%if user.email %} {{ user.email }} {%else%} {%endif%}</p>
+            <p class="mb-3" style="font-size: 1.75rem"><strong style="font-size: 1.75rem">Bio:</strong> {%if profile.bio %} {{ profile.bio }} {%else%} {%endif%}</p>
+            {% if profile.profile_picture %}
+                <img src="{{ profile.profile_picture.url }}" alt="Profile Picture">
+            {% endif %}
+            <form action="{% url 'edit_profile' %}">
+                <button type="submit" class="btn btn-primary">Edit Profile</button>
+            </form>
+
+<!--            <a class=""  href="{% url 'edit_profile' %}">Edit Profile</a>-->
+
+        </div>
+
     {% endblock %}
 
 </body>

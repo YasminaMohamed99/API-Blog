@@ -121,7 +121,7 @@ def del_post(request, post_id):
 @login_required
 def manage_profile(request):
     profile = request.user.profile
-    return render(request, "profile.html", {'profile': profile})
+    return render(request, "profile.html", {'profile': profile, 'user': request.user})
 
 
 @login_required

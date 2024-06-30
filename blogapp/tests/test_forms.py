@@ -73,11 +73,25 @@ class ProfileFormTest(TestCase):
         self.profile, _ = Profile.objects.get_or_create(user=self.user)
 
     def test_profile_form_valid(self):
-        form = ProfileForm(data={'bio': 'Test bio'}, instance=self.profile)
+        form_data = {
+            'bio': 'Updated bio content',
+            'profile_picture': None,
+            'email': 'test@example.com',
+            'first_name': 'test first name',
+            'last_name': 'test last name'
+        }
+        form = ProfileForm(data=form_data, instance=self.profile)
         self.assertTrue(form.is_valid())
 
     def test_profile_form_missing_bio(self):
-        form = ProfileForm(data={}, instance=self.profile)
+        form_data = {
+            'bio': 'Updated bio content',
+            'profile_picture': None,
+            'email': 'test@example.com',
+            'first_name': 'test first name',
+            'last_name': 'test last name'
+        }
+        form = ProfileForm(data=form_data, instance=self.profile)
         self.assertTrue(form.is_valid())
 
 

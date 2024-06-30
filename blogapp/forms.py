@@ -44,12 +44,33 @@ class LoginForm(forms.Form):
 
 
 class ProfileForm(forms.ModelForm):
+    email = forms.EmailField(label='Email', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    first_name = forms.CharField(label='First Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}))
+    last_name = forms.CharField(label='Last Name', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}))
+
     class Meta:
         model = Profile
-        fields = ('bio', 'profile_picture')
+        fields = ('email', 'first_name', 'last_name', 'bio', 'profile_picture')
         widgets = {
             'bio': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Bio', 'id': 'id_bio'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        if self.instance.user:
+            self.fields['email'].initial = self.instance.user.email
+            self.fields['first_name'].initial = self.instance.user.first_name
+            self.fields['last_name'].initial = self.instance.user.last_name
+
+    def save(self, commit=True):
+        profile = super(ProfileForm, self).save(commit=False)
+        if commit:
+            profile.user.email = self.cleaned_data['email']
+            profile.user.first_name = self.cleaned_data['first_name']
+            profile.user.last_name = self.cleaned_data['last_name']
+            profile.user.save()
+            profile.save()
+        return profile
 
 
 class PostForm(forms.ModelForm):

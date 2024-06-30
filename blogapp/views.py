@@ -1,12 +1,15 @@
 from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
 
 from blogapp.forms import UserForm, LoginForm, ProfileForm, PostForm
 from blogapp.models import Post, Category, Tag, Comment
@@ -179,7 +182,6 @@ def posts(request):
 @api_view(['GET', 'POST', 'DELETE'])
 def get_post(request, post_id):
     post = Post.objects.get(id=post_id)
-    print(post)
     if request.method == 'GET':
         post_serializer = PostSerializer(post, many=False)
         return Response(post_serializer.data)
@@ -187,13 +189,13 @@ def get_post(request, post_id):
         post_serializer = PostSerializer(data=request.data, instance=post)
         if post_serializer.is_valid():
             post_serializer.save()
-            return redirect('posts')
+            return Response(post_serializer.data)
         else:
-            return Response(post_serializer.errors)
+            return Response(post_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'DELETE':
         post.delete()
-        return Response("Post Deleted Successfully!")
+        return HttpResponseRedirect(redirect_to=reverse('posts'))
 
 
 @api_view(['GET'])
@@ -216,11 +218,12 @@ def comments(request):
         comments = Comment.objects.all()
         comment_serializer = CommentSerializer(comments, many=True)
         return Response(comment_serializer.data)
-    if request.method == 'Post':
+    if request.method == 'POST':
         comment_serializer = CommentSerializer(data=request.data)
         if comment_serializer.is_valid():
             comment_serializer.save()
-            return redirect('comments')
+            return HttpResponseRedirect(redirect_to=reverse('comments'))
+        return Response(comment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'DELETE'])
